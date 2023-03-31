@@ -9,6 +9,14 @@ function showRandomImageAtStart() {
     // TODO: Implement switchFullImage() below.
     // TODO: Call switchFullImage() with the URL of the random image and the alt attribute of the thumbnail (it contains the description).
     // TODO: Set a background color (classes .bg-dark and .text-white) to the card-body of your random image (hint: it's the sibling element of your link).
+
+    let section = document.getElementById("thumbnails");
+    let links = section.getElementsByTagName("a");
+    let random = links[Math.random * links.length];
+
+
+    
+    switchFullImage(random)
 }
 
 /**
