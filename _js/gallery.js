@@ -1,4 +1,4 @@
-"use strict";
+
 
 /**
  * Selects a random full image at the start and displays it.
@@ -12,11 +12,21 @@ function showRandomImageAtStart() {
 
     let section = document.getElementById("thumbnails");
     let links = section.getElementsByTagName("a");
-    let random = links[Math.random * links.length];
+    console.log(links);
+    let randomLink = links[Math.floor(Math.random() * links.length)];
+    console.log(randomLink);
+    let imageUrl = randomLink.href
+    let imageDescription = randomLink.firstElementChild.alt;
+
+    console.log(imageUrl);
+    console.log(imageDescription);
 
 
+    switchFullImage(imageUrl, imageDescription);
+
+    let cardBody = randomLink.nextElementSibling;
+    cardBody.classList.add("bg-dark", "text-white");
     
-    switchFullImage(random)
 }
 
 /**
@@ -36,6 +46,8 @@ function prepareLinks() {
     //  - Call switchFullImage() with the URL clicked link and the alt attribute of the thumbnail.
     //  - Implement and then call loadNotes() with the key for the current image (hint: the full image's URL makes an easy and unique key).
     //  - Prevent the default action for the link (we don't want to follow it).
+
+
 }
 
 /**
@@ -59,6 +71,15 @@ function switchFullImage(imageUrl, imageDescription) {
     // TODO: Set its src and alt attributes with the values from the parameters (imageUrl, imageDescription).
     // TODO: Select the <figcaption> element.
     // TODO: Set the description (the one you used for the alt attribute) as its text content.
+    
+    let fullImage = document.getElementById("fullImage");
+    let fullImageImg = fullImage.querySelector("img");
+    fullImageImg.setAttribute("src", imageUrl);
+    let caption = fullImage.querySelector("figcaption");
+    console.log(caption)
+    caption.textContent = imageDescription;
+   
+
 }
 
 /**
