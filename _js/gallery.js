@@ -1,4 +1,4 @@
-
+"use strict"
 
 /**
  * Selects a random full image at the start and displays it.
@@ -11,19 +11,20 @@ function showRandomImageAtStart() {
     // TODO: Set a background color (classes .bg-dark and .text-white) to the card-body of your random image (hint: it's the sibling element of your link).
 
     let section = document.getElementById("thumbnails");
-    let links = section.getElementsByTagName("a");
-    console.log(links);
+    let links = section.querySelectorAll("a");
+    //console.log(links);
     let randomLink = links[Math.floor(Math.random() * links.length)];
-    console.log(randomLink);
+    //console.log(randomLink);
     let imageUrl = randomLink.href
     let imageDescription = randomLink.firstElementChild.alt;
 
-    console.log(imageUrl);
-    console.log(imageDescription);
+    //console.log(imageUrl);
+    //console.log(imageDescription);
 
 
     switchFullImage(imageUrl, imageDescription);
-
+    loadNotes(imageUrl);
+   // storeNotes(imageUrl);
     let cardBody = randomLink.nextElementSibling;
     cardBody.classList.add("bg-dark", "text-white");
     
@@ -40,6 +41,32 @@ function prepareLinks() {
     // TODO: Set an event listener for the click event on every <a> element.
     //  (or advanced: think of a way to do it with one single handler)
 
+    let section = document.getElementById("thumbnails");
+    let links = section.querySelectorAll("a");
+    //console.log(links);
+
+    links.forEach(function(link){
+
+        link.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            links.forEach(function(otherLink){
+                otherLink.nextElementSibling.classList.remove("bg-dark", "text-white");
+            });
+
+            this.nextElementSibling.classList.add("bg-dark", "text-white");
+            //console.log(this.href)
+            switchFullImage(this.href, this.firstElementChild.alt);
+            //console.log("Marker")
+            loadNotes(this.href);
+           // storeNotes(this.href);
+            
+         });
+
+    });
+
+     
+
     // TODO: The callback of the listener should do the following things:
     //  - Remove the .bg-dark and .text-white classes from the card where it's currently set.
     //  - Add both classes again to the card where the click happened (hint: "this" contains the very <a> element, where the click happened).
@@ -50,14 +77,23 @@ function prepareLinks() {
 
 }
 
+
+
 /**
  * Stores or deletes the updated notes of an image after they have been changed.
  */
-function storeNotes() {
+function storeNotes(key) {
     // TODO: Select the notes field and add a blur listener.
     // TODO: When the notes field loses focus, store the notes for the current image in the local storage.
     // TODO: If the notes field is empty, remove the local storage entry.
     // TODO: Choose an appropriate key (hint: the full image's URL makes an easy and unique key).
+
+    let notes = document.getElementById("notes"); 
+    notes.addEventListener("blur", function(key){
+        localStorage.setItem(key, notes)
+    })
+
+    console.log(localStorage(key));
 }
 
 /**
@@ -76,7 +112,7 @@ function switchFullImage(imageUrl, imageDescription) {
     let fullImageImg = fullImage.querySelector("img");
     fullImageImg.setAttribute("src", imageUrl);
     let caption = fullImage.querySelector("figcaption");
-    console.log(caption)
+   // console.log(caption)
     caption.textContent = imageDescription;
    
 
@@ -91,6 +127,15 @@ function loadNotes(key) {
     // TODO: Check the local storage at the provided key.
     //  - If there's an entry, set the notes field's HTML content to the local storage's content.
     //  - If there's no entry, set the default text "Enter your notes here!".
+
+    let notes = localStorage.getItem(key) ?? 0; // wenn leer dann wird rechts zugewiesen 
+    //console.log(notes);
+    let field = document.getElementById("notes");
+    if ( notes != 0){
+      field.textContent = notes; //field.innerHTML = notes
+    }
+    
+
 }
 
 /**
