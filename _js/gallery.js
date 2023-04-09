@@ -23,8 +23,9 @@ function showRandomImageAtStart() {
 
 
     switchFullImage(imageUrl, imageDescription);
+    //storeNotes(imageUrl);
     loadNotes(imageUrl);
-   // storeNotes(imageUrl);
+   
     let cardBody = randomLink.nextElementSibling;
     cardBody.classList.add("bg-dark", "text-white");
     
@@ -59,7 +60,8 @@ function prepareLinks() {
             switchFullImage(this.href, this.firstElementChild.alt);
             //console.log("Marker")
             loadNotes(this.href);
-           // storeNotes(this.href);
+            storeNotes(this.href);
+            event.preventDefault();
             
          });
 
@@ -82,18 +84,27 @@ function prepareLinks() {
 /**
  * Stores or deletes the updated notes of an image after they have been changed.
  */
-function storeNotes(key) {
+function storeNotes() {
     // TODO: Select the notes field and add a blur listener.
     // TODO: When the notes field loses focus, store the notes for the current image in the local storage.
     // TODO: If the notes field is empty, remove the local storage entry.
     // TODO: Choose an appropriate key (hint: the full image's URL makes an easy and unique key).
 
     let notes = document.getElementById("notes"); 
-    notes.addEventListener("blur", function(key){
-        localStorage.setItem(key, notes)
+    console.log(notes.textContent);
+    notes.addEventListener("blur", function(){
+        let key = document.getElementById("fullImage").querySelector("src");
+        console.log(key);
+        if (notes.value !== "") {
+            localStorage.setItem(key, notes.value);
+          } else {
+            localStorage.removeItem(key);
+          }
+
+         // console.log(localStorage(key));
     })
 
-    console.log(localStorage(key));
+    
 }
 
 /**
@@ -134,6 +145,7 @@ function loadNotes(key) {
     if ( notes != 0){
       field.textContent = notes; //field.innerHTML = notes
     }
+    
     
 
 }
